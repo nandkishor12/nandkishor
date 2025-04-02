@@ -1,13 +1,24 @@
 pipeline {
     agent any
-    environment {
-        KUBECONFIG = credentials('kubeconfig')
-    }
+
     stages {
-        stage('Verify Kubernetes Access') {
+        stage('Loop Through ClusterIP Services') {
             steps {
-                sh 'kubectl cluster-info'
+                script {
+                    // Execute command to get NAME, TYPE, and AGE of ClusterIP services
+                    def services = sh(script: "kubectl get svc | awk '\$2 == \"ClusterIP\" {print \$1, \$2, \$6}'", returnStdout: true).trim().split("\n")
+                        sh'kubectl get svc'
+                    // Loop through each service and echo the details
+                    for (service in services) {
+                        def parts = service.split(" ")
+                        def name = parts[0]
+                        def type = parts[1]
+                        def age = parts[2]
+                        echo "Service Name: ${name}, Type: ${type}, Age: ${age}"
+                    }
+                }
             }
         }
     }
 }
+
