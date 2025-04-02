@@ -1,0 +1,13 @@
+pipeline {
+    agent any
+    environment {
+        KUBECONFIG = credentials('kubeconfig')
+    }
+    stages {
+        stage('Verify Kubernetes Access') {
+            steps {
+                sh 'kubectl cluster-info'
+            }
+        }
+    }
+}
