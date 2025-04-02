@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'main2', url: 'git@github.com:nandkishor12/nandkishor.git'
+                git branch: 'main', url: 'git@github.com:nandkishor12/nandkishor.git'
             }
         }
     }
